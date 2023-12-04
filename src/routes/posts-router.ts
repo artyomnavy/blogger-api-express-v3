@@ -4,11 +4,12 @@ import {
 import {Params, RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery} from "../types/common";
 import {CreateAndUpdatePostModel, PaginatorPostModel} from "../types/post/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {postBodyValidation} from "../middlewares/validators/posts-validator";
 import {ObjectIdValidation} from "../middlewares/validators/ObjectId-validator";
 import {postsService} from "../domain/posts-service";
 import {postsQueryRepository} from "../repositories/posts-db-query-repository";
 import {HTTP_STATUSES} from "../utils";
+import {postValidation} from "../middlewares/validators/posts-validator";
+
 export const postsRouter = Router({})
 
 postsRouter.get('/', async (req: RequestWithQuery<PaginatorPostModel>, res: Response) => {
@@ -29,7 +30,7 @@ postsRouter.get('/', async (req: RequestWithQuery<PaginatorPostModel>, res: Resp
     res.send(posts)
 })
 
-postsRouter.post('/', authMiddleware, postBodyValidation(),
+postsRouter.post('/', authMiddleware, postValidation(),
     async (req: RequestWithBody<CreateAndUpdatePostModel>, res: Response) => {
 
     let {
@@ -62,7 +63,7 @@ postsRouter.get('/:id', ObjectIdValidation,
     }
 })
 
-postsRouter.put('/:id', authMiddleware, ObjectIdValidation, postBodyValidation(),
+postsRouter.put('/:id', authMiddleware, ObjectIdValidation, postValidation(),
     async (req: RequestWithParamsAndBody<Params, CreateAndUpdatePostModel>, res: Response) => {
 
     const id = req.params.id

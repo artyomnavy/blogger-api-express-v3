@@ -16,11 +16,10 @@ import {ObjectIdValidation} from "../middlewares/validators/ObjectId-validator";
 import {blogsService} from "../domain/blogs-service";
 import {blogsQueryRepository} from "../repositories/blogs-db-query-repository";
 import {postsQueryRepository} from "../repositories/posts-db-query-repository";
-import {postBodyAndParamValidation} from "../middlewares/validators/posts-validator";
 import {CreateAndUpdatePostModel} from "../types/post/input";
-import {ObjectId} from "mongodb";
 import {postsService} from "../domain/posts-service";
 import {HTTP_STATUSES} from "../utils";
+import {postForBlogValidation} from "../middlewares/validators/posts-for-blog-validator";
 
 export const blogsRouter = Router({})
 
@@ -70,11 +69,6 @@ blogsRouter.get('/:blogId/posts', async (req: RequestParamsWithQuery<ParamsBlogI
         sortDirection,
     } = req.query
 
-    if (!ObjectId.isValid(blogId)) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
-        return
-    }
-
     const blog = await blogsQueryRepository
         .getBlogById(blogId)
 
@@ -97,11 +91,14 @@ blogsRouter.get('/:blogId/posts', async (req: RequestParamsWithQuery<ParamsBlogI
     res.send(posts)
 })
 
-blogsRouter.post('/:blogId/posts', authMiddleware, postBodyAndParamValidation(),
+blogsRouter.post('/:blogId/posts', authMiddleware, postForBlogValidation(),
     async (req: RequestWithParamsAndBody<ParamsBlogId, CreateAndUpdatePostModel>, res: Response) => {
         const blogId = req.params.blogId
 
-        if (!ObjectId.isValid(blogId)) {
+        const blog = await blogsQueryRepository
+            .getBlogById(blogId)
+
+        if (!blog) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return
         }
@@ -116,7 +113,7 @@ blogsRouter.post('/:blogId/posts', authMiddleware, postBodyAndParamValidation(),
             title,
             shortDescription,
             content,
-            blogId
+            blogId,
         })
 
         res.status(HTTP_STATUSES.CREATED_201).send(post)

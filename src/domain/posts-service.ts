@@ -6,7 +6,8 @@ import {blogsQueryRepository} from "../repositories/blogs-db-query-repository";
 
 export const postsService = {
     async createPost(createData: CreateAndUpdatePostModel): Promise<OutputPostsType> {
-        const blog = await blogsQueryRepository.getBlogById(createData.blogId)
+        const blog = await blogsQueryRepository
+            .getBlogById(createData.blogId)
 
         const newPost = {
             _id: new ObjectId(),

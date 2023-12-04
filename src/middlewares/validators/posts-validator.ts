@@ -1,4 +1,4 @@
-import {body, param} from "express-validator";
+import {body} from "express-validator";
 import {inputModelValidation} from "../inputModel/input-model-validation";
 import {blogsQueryRepository} from "../../repositories/blogs-db-query-repository";
 
@@ -19,7 +19,7 @@ const contentValidation = body('content')
     .isLength({min: 1, max: 1000})
     .withMessage('Invalid content')
 
-const blogIdBodyValidation = body('blogId')
+const blogIdValidation = body('blogId')
     .isString()
     .trim()
     .custom(async (value) => {
@@ -34,20 +34,4 @@ const blogIdBodyValidation = body('blogId')
     })
     .withMessage('Invalid blogId')
 
-const blogIdParamValidation = param('blogId')
-    .isString()
-    .trim()
-    .custom(async (value) => {
-        const blog = await blogsQueryRepository.getBlogById(value)
-
-        if (blog === null) {
-            throw new Error('Invalid blogId')
-        } else {
-            return true
-        }
-
-    })
-    .withMessage('Invalid blogId')
-
-export const postBodyValidation = () => [titleValidation, shortDescriptionValidation, contentValidation, blogIdBodyValidation, inputModelValidation]
-export const postBodyAndParamValidation = () => [titleValidation, shortDescriptionValidation, contentValidation, blogIdParamValidation, inputModelValidation]
+export const postValidation = () => [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputModelValidation]
