@@ -6,7 +6,7 @@ import {HTTP_STATUSES} from "../../utils";
 
 export const ObjectIdValidation = (req: RequestWithParams<Params>, res: Response, next: NextFunction) => {
 
-    if (!ObjectId.isValid(req.params.id )) {
+    if (!ObjectId.isValid(req.params.id)) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
