@@ -30,13 +30,13 @@ export const postsQueryRepository = {
             .toArray()
 
         const totalCount = await postsCollection.countDocuments({})
-        const pagesCount = Math.ceil(totalCount / +pageSize)
+        const pagesCount = Math.ceil(+totalCount / +pageSize)
 
         return {
             pagesCount: pagesCount,
             page: pageNumber,
             pageSize: +pageSize,
-            totalCount: totalCount,
+            totalCount: +totalCount,
             items: posts.map(postMapper)
         }
     },
@@ -79,13 +79,13 @@ export const postsQueryRepository = {
             .toArray()
 
         const totalCount = await postsCollection.countDocuments(filter)
-        const pagesCount = Math.ceil(totalCount / +pageSize)
+        const pagesCount = Math.ceil(+totalCount / +pageSize)
 
         return {
             pagesCount: pagesCount,
-            page: pageNumber,
-            pageSize: pageSize,
-            totalCount: totalCount,
+            page: +pageNumber,
+            pageSize: +pageSize,
+            totalCount: +totalCount,
             items: posts.map(postMapper)
         }
     }
