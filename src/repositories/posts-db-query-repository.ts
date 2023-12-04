@@ -66,7 +66,7 @@ export const postsQueryRepository = {
         const blogId = QueryData.blogId
 
          let filter = {
-            name: {
+            blogId: {
                 $regex: blogId
             }
          }
