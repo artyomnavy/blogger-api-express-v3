@@ -34,7 +34,7 @@ export const postsQueryRepository = {
 
         return {
             pagesCount: pagesCount,
-            page: pageNumber,
+            page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCount,
             items: posts.map(postMapper)
