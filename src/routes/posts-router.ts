@@ -1,6 +1,4 @@
 import {Response, Router} from "express";
-import {
-} from "../settings";
 import {Params, RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery} from "../types/common";
 import {CreateAndUpdatePostModel, PaginatorPostModel} from "../types/post/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
