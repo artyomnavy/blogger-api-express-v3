@@ -35,3 +35,5 @@ const blogIdValidation = body('blogId')
     .withMessage('Invalid blogId')
 
 export const postValidation = () => [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputModelValidation]
+
+export const postForBlogValidation = () => [titleValidation, shortDescriptionValidation, contentValidation, inputModelValidation]

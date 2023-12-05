@@ -13,10 +13,6 @@ export type Params = {
     id: string,
 }
 
-export type ParamsBlogId = {
-    blogId: string
-}
-
 export type RequestWithBody<B> = Request<{}, {}, B, {}>
 export type RequestWithParams<P> = Request<P, {}, {}, {}>
 export type RequestWithParamsAndBody<P, B> = Request<P, {}, B, {}>

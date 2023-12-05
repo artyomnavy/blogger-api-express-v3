@@ -1,6 +1,6 @@
 import {Response, Router} from "express";
 import {
-    Params, ParamsBlogId, RequestParamsWithQuery,
+    Params, RequestParamsWithQuery,
     RequestWithBody,
     RequestWithParams,
     RequestWithParamsAndBody,
@@ -19,7 +19,7 @@ import {postsQueryRepository} from "../repositories/posts-db-query-repository";
 import {CreateAndUpdatePostModel} from "../types/post/input";
 import {postsService} from "../domain/posts-service";
 import {HTTP_STATUSES} from "../utils";
-import {postForBlogValidation} from "../middlewares/validators/posts-for-blog-validator";
+import {postForBlogValidation} from "../middlewares/validators/posts-validator";
 
 export const blogsRouter = Router({})
 
@@ -44,7 +44,9 @@ blogsRouter.get('/', async (req: RequestWithQuery<PaginatorBlogModel>, res: Resp
     res.send(blogs)
 })
 
-blogsRouter.post('/', authMiddleware, blogValidation(),
+blogsRouter.post('/',
+    authMiddleware,
+    blogValidation(),
     async (req: RequestWithBody<CreateAndUpdateBlogModel>, res: Response) => {
 
     let {
@@ -59,8 +61,11 @@ blogsRouter.post('/', authMiddleware, blogValidation(),
     res.status(HTTP_STATUSES.CREATED_201).send(newBlog)
 })
 
-blogsRouter.get('/:blogId/posts', async (req: RequestParamsWithQuery<ParamsBlogId, PaginatorPostWithBlogIdModel>, res: Response) => {
-    const blogId = req.params.blogId
+blogsRouter.get('/:id/posts',
+    ObjectIdValidation,
+    async (req: RequestParamsWithQuery<Params, PaginatorPostWithBlogIdModel>, res: Response) => {
+
+    const blogId = req.params.id
 
     let {
         pageNumber,
@@ -91,9 +96,12 @@ blogsRouter.get('/:blogId/posts', async (req: RequestParamsWithQuery<ParamsBlogI
     res.send(posts)
 })
 
-blogsRouter.post('/:blogId/posts', authMiddleware, postForBlogValidation(),
-    async (req: RequestWithParamsAndBody<ParamsBlogId, CreateAndUpdatePostModel>, res: Response) => {
-        const blogId = req.params.blogId
+blogsRouter.post('/:id/posts',
+    authMiddleware,
+    ObjectIdValidation,
+    postForBlogValidation(),
+    async (req: RequestWithParamsAndBody<Params, CreateAndUpdatePostModel>, res: Response) => {
+        const blogId = req.params.id
 
         const blog = await blogsQueryRepository
             .getBlogById(blogId)
@@ -121,7 +129,8 @@ blogsRouter.post('/:blogId/posts', authMiddleware, postForBlogValidation(),
     })
 
 
-blogsRouter.get('/:id', ObjectIdValidation,
+blogsRouter.get('/:id',
+    ObjectIdValidation,
     async (req: RequestWithParams<Params>, res: Response) => {
 
     const id = req.params.id
@@ -137,7 +146,10 @@ blogsRouter.get('/:id', ObjectIdValidation,
     }
 })
 
-blogsRouter.put('/:id', authMiddleware, ObjectIdValidation, blogValidation(),
+blogsRouter.put('/:id',
+    authMiddleware,
+    ObjectIdValidation,
+    blogValidation(),
     async (req: RequestWithParamsAndBody<Params, CreateAndUpdateBlogModel>, res: Response) => {
 
     const id = req.params.id
@@ -169,7 +181,9 @@ blogsRouter.put('/:id', authMiddleware, ObjectIdValidation, blogValidation(),
 
 })
 
-blogsRouter.delete('/:id', authMiddleware, ObjectIdValidation,
+blogsRouter.delete('/:id',
+    authMiddleware,
+    ObjectIdValidation,
     async (req: RequestWithParams<Params>, res: Response) => {
 
     const id = req.params.id

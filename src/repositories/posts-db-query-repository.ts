@@ -5,7 +5,6 @@ import {ObjectId} from "mongodb";
 import {PaginatorPostModel} from "../types/post/input";
 import {PaginatorPostWithBlogIdModel} from "../types/blog/input";
 import {PaginatorPostWithBlogIdType} from "../types/blog/output";
-import {ParamsBlogId} from "../types/common";
 
 export const postsQueryRepository = {
     async getAllPosts(QueryData: PaginatorPostModel): Promise<PaginatorPostsType> {
@@ -50,7 +49,7 @@ export const postsQueryRepository = {
             return postMapper(post)
         }
     },
-    async getPostsByBlogId(QueryData: PaginatorPostWithBlogIdModel & ParamsBlogId): Promise<PaginatorPostWithBlogIdType> {
+    async getPostsByBlogId(QueryData: PaginatorPostWithBlogIdModel & { blogId: string } ): Promise<PaginatorPostWithBlogIdType> {
         const pageNumber = QueryData.pageNumber ?
             QueryData.pageNumber :
             1

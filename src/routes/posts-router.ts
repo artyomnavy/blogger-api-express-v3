@@ -10,7 +10,8 @@ import {postValidation} from "../middlewares/validators/posts-validator";
 
 export const postsRouter = Router({})
 
-postsRouter.get('/', async (req: RequestWithQuery<PaginatorPostModel>, res: Response) => {
+postsRouter.get('/',
+    async (req: RequestWithQuery<PaginatorPostModel>, res: Response) => {
     let {
         pageNumber,
         pageSize,
@@ -28,7 +29,9 @@ postsRouter.get('/', async (req: RequestWithQuery<PaginatorPostModel>, res: Resp
     res.send(posts)
 })
 
-postsRouter.post('/', authMiddleware, postValidation(),
+postsRouter.post('/',
+    authMiddleware,
+    postValidation(),
     async (req: RequestWithBody<CreateAndUpdatePostModel>, res: Response) => {
 
     let {
@@ -45,7 +48,8 @@ postsRouter.post('/', authMiddleware, postValidation(),
 
 })
 
-postsRouter.get('/:id', ObjectIdValidation,
+postsRouter.get('/:id',
+    ObjectIdValidation,
     async (req: RequestWithParams<Params>, res: Response) => {
 
     const id = req.params.id
@@ -61,7 +65,10 @@ postsRouter.get('/:id', ObjectIdValidation,
     }
 })
 
-postsRouter.put('/:id', authMiddleware, ObjectIdValidation, postValidation(),
+postsRouter.put('/:id',
+    authMiddleware,
+    ObjectIdValidation,
+    postValidation(),
     async (req: RequestWithParamsAndBody<Params, CreateAndUpdatePostModel>, res: Response) => {
 
     const id = req.params.id
@@ -93,7 +100,9 @@ postsRouter.put('/:id', authMiddleware, ObjectIdValidation, postValidation(),
     }
 })
 
-postsRouter.delete('/:id', authMiddleware, ObjectIdValidation,
+postsRouter.delete('/:id',
+    authMiddleware,
+    ObjectIdValidation,
     async (req: RequestWithParams<Params>, res: Response) => {
 
     const id = req.params.id
