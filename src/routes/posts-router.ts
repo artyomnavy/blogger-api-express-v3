@@ -42,7 +42,12 @@ postsRouter.post('/',
     } = req.body
 
     const newPost = await postsService
-        .createPost({title, shortDescription, content, blogId})
+        .createPost({
+            title,
+            shortDescription,
+            content,
+            blogId
+        })
 
     res.status(HTTP_STATUSES.CREATED_201).send(newPost)
 
